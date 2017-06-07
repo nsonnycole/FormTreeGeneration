@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TreeGeneration</title>
+	<meta name="description" content="Fullscreen Form Interface: A distraction-free form concept with fancy animations" />
+	<meta name="keywords" content="fullscreen form, css animations, distraction-free, web design" />
+	<meta name="author" content="Codrops" />
+	<link rel="shortcut icon" href="../favicon.ico">
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="css/component.css" />
+	<link rel="stylesheet" type="text/css" href="css/cs-select.css" />
+	<link rel="stylesheet" type="text/css" href="css/cs-skin-boxes.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/modernizr.custom.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		<div class="fs-form-wrap" id="fs-form-wrap">
+			<div class="fs-title">
+				<h1>TreeGeneration</h1>
+			</div>
+		<p>
+			<canvas align="center"class="tree" height="600" />
+		</p>
+		<a href="formulaire.html">
+			<button align="center" class="btn btn-info pull-right">Commencer</button>
+		</a>
+</div>
+	</div><!-- /container -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script src="js/classie.js"></script>
+	<script src="js/selectFx.js"></script>
+	<script src="js/fullscreenForm.js"></script>
+	<script type="text/javascript"  src="js/tree.js"></script>
+	x
+	<script>
+	var TxtType = function(el, toRotate, period) {
+		this.toRotate = toRotate;
+		this.el = el;
+		this.loopNum = 0;
+		this.period = parseInt(period, 10) || 2000;
+		this.txt = '';
+		this.tick();
+		this.isDeleting = false;
+	};
+
+	TxtType.prototype.tick = function() {
+		var i = this.loopNum % this.toRotate.length;
+		var fullTxt = this.toRotate[i];
+
+		if (this.isDeleting) {
+			this.txt = fullTxt.substring(0, this.txt.length - 1);
+		} else {
+			this.txt = fullTxt.substring(0, this.txt.length + 1);
+		}
+
+		this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+		var that = this;
+		var delta = 200 - Math.random() * 100;
+
+		if (this.isDeleting) { delta /= 2; }
+
+		if (!this.isDeleting && this.txt === fullTxt) {
+			delta = this.period;
+			this.isDeleting = true;
+		} else if (this.isDeleting && this.txt === '') {
+			this.isDeleting = false;
+			this.loopNum++;
+			delta = 500;
+		}
+
+		setTimeout(function() {
+			that.tick();
+		}, delta);
+	};
+
+	window.onload = function() {
+		var elements = document.getElementsByClassName('typewrite');
+		for (var i=0; i<elements.length; i++) {
+			var toRotate = elements[i].getAttribute('data-type');
+			var period = elements[i].getAttribute('data-period');
+			if (toRotate) {
+				new TxtType(elements[i], JSON.parse(toRotate), period);
+			}
+		}
+		// INJECT CSS
+		var css = document.createElement("style");
+		css.type = "text/css";
+		css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+		document.body.appendChild(css);
+	};
+
+	</script>
+
+</body>
+</html>
